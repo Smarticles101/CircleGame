@@ -43,7 +43,7 @@ function draw() {
 
             if (Math.hypot(player.pos.x - circle.pos.x, player.pos.y - circle.pos.y) <= player.size / 2 / 2 + circle.size / 2 / 2) {
                 if (player.size > circle.size) {
-                    player.size += Math.round(circle.size / player.size * 10);
+                    player.size += Math.round((circle.size / player.size) * 10);
 
                     circles.splice(circles.indexOf(circle), 1);
                     circles.push(makecircle());
