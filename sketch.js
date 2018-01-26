@@ -1,11 +1,13 @@
 var circles = [];
 var player = {};
 var amt = 30;
+var scl = 1;
+var startSize = 100;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
 
-    player = makecircle(50);
+    player = makecircle(startSize);
     player.pos = createVector(width / 2, height / 2);
 
     for (var i = 0; i < amt; i++) {
@@ -19,6 +21,8 @@ function setup() {
 function draw() {
     clear();
     background(0);
+    scl = (startSize / player.size);
+    scale(scl);
 
     if (mouseX !== 0 && mouseY !== 0) {
         player.pos.x = mouseX;
@@ -35,20 +39,20 @@ function draw() {
             circles.push(makecircle());
         } else {
             fill(circle.color, 255, 255, 150);
-            ellipse(circle.pos.x, circle.pos.y, circle.size, circle.size);
+            ellipse(circle.pos.x/scl, circle.pos.y/scl, circle.size, circle.size);
             textAlign(CENTER, CENTER);
             textSize(circle.size/2);
             fill(255);
-            text(circle.size, circle.pos.x, circle.pos.y);
+            text(circle.size, circle.pos.x/scl, circle.pos.y/scl);
 
-            if (Math.hypot(player.pos.x - circle.pos.x, player.pos.y - circle.pos.y) <= player.size / 2 / 2 + circle.size / 2 / 2) {
+            if (Math.hypot(player.pos.x/scl - circle.pos.x/scl, player.pos.y/scl - circle.pos.y/scl) <= player.size / 2 / 2 + circle.size / 2 / 2) {
                 if (player.size > circle.size) {
-                    player.size += Math.round((circle.size / player.size) * 10);
+                    player.size += Math.floor((circle.size / player.size) * 10);
 
                     circles.splice(circles.indexOf(circle), 1);
                     circles.push(makecircle());
                 } else if (player.size < circle.size) {
-                    player.size = 50;
+                    player.size = startSize;
 
                     for (var i = 0; i < amt; i++) {
                         circles.shift();
@@ -60,34 +64,35 @@ function draw() {
     });
 
     fill(player.color, 255, 255, 150);
-    ellipse(player.pos.x, player.pos.y, player.size, player.size);
+    ellipse(player.pos.x/scl, player.pos.y/scl, player.size, player.size);
     textAlign(CENTER, CENTER);
     textSize(player.size / 2);
     fill(255);
-    text(player.size, player.pos.x, player.pos.y);
+    text(player.size, player.pos.x/scl, player.pos.y/scl);
 }
 
 function makecircle(size) {
     var circle = {
-        size: size !== undefined ? size : Math.round(random(player.size - 25, player.size + 100)),
+        size: size !== undefined ? size : Math.round(random(player.size - 25, player.size + 150)),
         pos: Math.round(random()) === 1 ?
             createVector(Math.round(random()) * width, random() * height) :
             createVector(random() * width, Math.round(random()) * height),
         color: random(360)
     };
     circle.vel = createVector(
-        Math.round(circle.pos.x / width) === 0 ? random() : 0 - random(),
-        Math.round(circle.pos.y / height) === 0 ? random() : 0 - random()
+        Math.round((circle.pos.x) / (width)) === 0 ? random() : 0 - random(),
+        Math.round((circle.pos.y) / (height)) === 0 ? random() : 0 - random()
     );
 
     if (circle.pos.y === 0) {
         circle.pos.y = 0 - circle.size / 2;
     } else if (circle.pos.x === 0) {
         circle.pos.x = 0 - circle.size / 2;
-    } else if (circle.pos.x === width) {
-        circle.pos.x = width + circle.size / 2;
-    } else if (circle.pos.y === height) {
-        circle.pos.y = height + circle.size / 2
+    } else if (circle.pos.x/scl === width) {
+        circle.pos.x = width/scl + circle.size / 2;
+    } else if (circle.pos.y/scl === height) {
+        circle.pos.y = height/scl + circle.size / 2;
+
     }
 
     return circle;
