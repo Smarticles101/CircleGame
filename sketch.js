@@ -24,9 +24,22 @@ function draw() {
     scl = (startSize / player.size);
     scale(scl);
 
-    if (mouseX !== 0 && mouseY !== 0) {
-        player.pos.x = mouseX;
-        player.pos.y = mouseY;
+    //if (mouseX !== 0 && mouseY !== 0) {
+    //    player.pos.x = mouseX;
+    //    player.pos.y = mouseY;
+    //}
+
+    if (keyIsDown(UP_ARROW)) {
+        player.pos.y -= 5;
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+        player.pos.y += 5;
+    }
+    if (keyIsDown(LEFT_ARROW)) {
+        player.pos.x -= 5;
+    }
+    if (keyIsDown(RIGHT_ARROW)) {
+        player.pos.x += 5;
     }
 
     circles.forEach(circle => {
